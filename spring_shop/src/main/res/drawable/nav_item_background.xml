@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Состояние при нажатии (тот самый эффект) -->
+    <item android:state_pressed="true">
+        <shape android:shape="rectangle">
+            <solid android:color="#20A8E4A0" /> <!-- Очень прозрачный зеленый -->
+            <corners android:radius="16dp" />
+        </shape>
+    </item>
+    <!-- Состояние, когда пункт выбран (активен) -->
+    <item android:state_checked="true">
+        <shape android:shape="rectangle">
+            <solid android:color="#15A8E4A0" /> <!-- Еще более прозрачный для постоянного фона -->
+            <corners android:radius="16dp" />
+        </shape>
+    </item>
+    <!-- Обычное состояние -->
+    <item android:color="@android:color/transparent" />
+</selector>

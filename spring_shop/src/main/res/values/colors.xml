@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Основная палитра -->
+    <color name="app_background">#0A0A0A</color>       <!-- Черный фон -->
+    <color name="main_sapphire">#1D1E33</color>        <!-- Сапфирово-синий -->
+    <color name="accent_green">#A8E4A0</color>         <!-- Зеленый акцент -->
+    <color name="price_antique">#FAEBD7</color>        <!-- Цвет цены -->
+    <color name="text_white">#FFFFFF</color>           <!-- Белый текст -->
+
+    <!-- Для совместимости с системой -->
+    <color name="black">#000000</color>
+    <color name="white">#FFFFFF</color>
+</resources>
