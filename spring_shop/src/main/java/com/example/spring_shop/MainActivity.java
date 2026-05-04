@@ -23,7 +23,7 @@ public class MainActivity extends AppCompatActivity {
         getWindow().setStatusBarColor(getResources().getColor(R.color.app_background));
 
         BottomNavigationView navView = findViewById(R.id.bottom_navigation);
-        // Отключаем внутренний механизм отрисовки индикатора
+// Отключаем внутренний механизм отрисовки индикатора
         navView.setItemActiveIndicatorEnabled(false);
 
 

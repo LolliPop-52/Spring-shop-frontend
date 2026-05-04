@@ -9,18 +9,18 @@ public class ProductDTO {
     private String description;
     private java.math.BigDecimal price;
     private java.util.List<CategoryDTO> categories;
-    private java.util.List<String> imageUrls;
+    private String imageUrl;
 
     public ProductDTO() {
     }
 
-    public ProductDTO(Long id, String title, String description, BigDecimal price, List<CategoryDTO> categories, List<String> imageUrls) {
+    public ProductDTO(Long id, String title, String description, BigDecimal price, List<CategoryDTO> categories, String imageUrl) {
         this.id = id;
         this.title = title;
         this.description = description;
         this.price = price;
         this.categories = categories;
-        this.imageUrls = imageUrls;
+        this.imageUrl = imageUrl;
     }
 
     public Long getId() {
@@ -63,11 +63,11 @@ public class ProductDTO {
         this.categories = categories;
     }
 
-    public List<String> getImageUrls() {
-        return imageUrls;
+    public String getImageUrl() {
+        return imageUrl;
     }
 
     public void setImageUrls(List<String> imageUrls) {
-        this.imageUrls = imageUrls;
+        this.imageUrl = imageUrl;
     }
 }

@@ -19,8 +19,8 @@
         android:elevation="4dp">
 
         <ImageView
-            android:layout_width="20dp"
-            android:layout_height="20dp"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
             android:src="@drawable/ic_search"
             app:tint="@color/accent_green" />
 
@@ -30,7 +30,7 @@
             android:layout_height="match_parent"
             android:layout_marginStart="12dp"
             android:background="@android:color/transparent"
-            android:hint="Поиск товаров..."
+            android:hint="Искать в Spring"
             android:textColorHint="#8E8E8E"
             android:textColor="@color/text_white"
             android:textSize="14sp"

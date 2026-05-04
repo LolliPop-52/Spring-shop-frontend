@@ -42,14 +42,19 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
         holder.title.setText(product.getTitle());
         holder.price.setText(product.getPrice().toString() + " ₽");
 
-        // Загружаем картинку (первую из списка) с помощью Glide
-        if (product.getImageUrls() != null && !product.getImageUrls().isEmpty()) {
+        // ИСПОЛЬЗУЕМ СТРОКУ imageUrl напрямую
+        if (product.getImageUrl() != null && !product.getImageUrl().isEmpty()) {
             Glide.with(context)
-                    .load(product.getImageUrls().get(0)) // берем первую ссылку
-                    .placeholder(R.drawable.placeholder_gray) // картинка-заглушка
+                    .load(product.getImageUrl()) // Больше никаких .get(0)
+                    .centerCrop()
+                    .placeholder(R.drawable.placeholder_gray)
+                    .error(R.drawable.error_image) // Поможет понять, если ссылка битая
                     .into(holder.image);
+        } else {
+            holder.image.setImageResource(R.drawable.placeholder_gray);
         }
     }
+
 
     @Override
     public int getItemCount() {

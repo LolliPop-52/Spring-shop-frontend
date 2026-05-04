@@ -1,25 +1,40 @@
 package com.example.spring_shop.api;
 
 import android.content.Context;
-
+import okhttp3.OkHttpClient;
+import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
+import java.util.concurrent.TimeUnit;
 
 public class NetworkService {
     private static NetworkService mInstance;
-    private static final String BASE_URL = "http://10.0.2.2:8080/"; // Твой адрес Spring Boot
+    private static final String BASE_URL = "http://10.0.2.2:8080/";
     private Retrofit mRetrofit;
 
     private NetworkService(Context context) {
+        // Добавляем логгер, чтобы видеть запросы в Logcat
+        HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
+        interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+
+        // Настраиваем клиент
+        OkHttpClient client = new OkHttpClient.Builder()
+                .addInterceptor(interceptor)
+                .connectTimeout(30, TimeUnit.SECONDS) // Даем бэкенду время на ответ
+                .readTimeout(30, TimeUnit.SECONDS)
+                .build();
+
         mRetrofit = new Retrofit.Builder()
                 .baseUrl(BASE_URL)
+                .client(client) // Привязываем клиент к Retrofit
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
     }
 
-    public static NetworkService getInstance(Context context) {
+    public static synchronized NetworkService getInstance(Context context) {
         if (mInstance == null) {
-            mInstance = new NetworkService(context);
+            // Используем applicationContext для предотвращения утечек памяти
+            mInstance = new NetworkService(context.getApplicationContext());
         }
         return mInstance;
     }

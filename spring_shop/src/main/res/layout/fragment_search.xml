@@ -1,32 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical">
+    android:background="@color/app_background"
+    android:paddingTop="38dp">
 
-    <!-- Верхняя плашка поиска -->
-    <androidx.cardview.widget.CardView
+    <!-- Статичная плашка-кнопка (копия стиля Home) -->
+    <LinearLayout
         android:id="@+id/search_bar_trigger"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:layout_margin="10dp"
-        app:cardCornerRadius="8dp"
-        app:cardElevation="4dp">
+        android:layout_marginHorizontal="16dp"
+        android:background="@drawable/search_bg"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingHorizontal="16dp"
+        android:elevation="4dp"
+        android:clickable="true"
+        android:focusable="true">
+
+        <ImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/ic_search"
+            app:tint="@color/accent_green" />
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_marginStart="15dp"
-            android:text="Поиск в Spring"
-            android:textColor="@android:color/darker_gray" />
-    </androidx.cardview.widget.CardView>
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="12dp"
+            android:gravity="center_vertical"
+            android:text="Искать в Spring"
+            android:textColorHint="#8E8E8E"
+            android:textColor="#8E8E8E"
+            android:textSize="14sp" />
+    </LinearLayout>
 
-    <!-- Сетка категорий -->
+    <!-- Твой RecyclerView для плитки категорий -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/categories_recycler"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_below="@id/search_bar_trigger"
+        android:layout_marginTop="12dp"
+        android:clipToPadding="false"
         android:padding="8dp" />
-</LinearLayout>
+
+</RelativeLayout>

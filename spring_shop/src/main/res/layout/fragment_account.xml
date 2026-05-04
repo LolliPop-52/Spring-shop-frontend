@@ -1,30 +1,129 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center_horizontal"
-    android:orientation="vertical"
-    android:padding="20dp">
+    android:background="@color/app_background"
+    android:fillViewport="true">
 
-    <ImageView
-        android:id="@+id/user_avatar"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:src="@drawable/ic_account" />
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
-    <TextView
-        android:id="@+id/user_name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:text="Имя Пользователя"
-        android:textSize="20sp"
-        android:textStyle="bold" />
+        <!-- СОСТОЯНИЕ 1: ПРОФИЛЬ (Авторизован) -->
+        <LinearLayout
+            android:id="@+id/profile_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="24dp"
+            android:gravity="center_horizontal"
+            android:visibility="gone"> <!-- Скрыто по умолчанию -->
 
-    <TextView
-        android:id="@+id/user_email"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="user@example.com"
-        android:textColor="@android:color/darker_gray" />
-</LinearLayout>
+            <ImageView
+                android:layout_width="120dp"
+                android:layout_height="120dp"
+                android:layout_marginTop="20dp"
+                android:src="@drawable/ic_account"
+                app:tint="@color/accent_green" />
+
+            <TextView
+                android:id="@+id/user_name_display"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="Имя Пользователя"
+                android:textColor="@color/white"
+                android:textSize="22sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/user_email_display"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="user@example.com"
+                android:textColor="#AAAAAA"
+                android:textSize="16sp" />
+
+            <!-- Карточка с данными -->
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="32dp"
+                app:cardBackgroundColor="#2C2C2C"
+                app:cardCornerRadius="15dp"
+                app:cardElevation="0dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Статус: Активен"
+                        android:textColor="@color/accent_green" />
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_edit_profile"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:layout_marginTop="24dp"
+                android:text="Изменить данные"
+                android:textColor="@color/black"
+                app:backgroundTint="@color/accent_green"
+                app:cornerRadius="12dp" />
+
+            <Button
+                android:id="@+id/btn_logout"
+                style="@style/Widget.MaterialComponents.Button.TextButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="Выйти из аккаунта"
+                android:textColor="#FF5252" />
+        </LinearLayout>
+
+        <!-- СОСТОЯНИЕ 2: ВХОД / РЕГИСТРАЦИЯ (Гость) -->
+        <LinearLayout
+            android:id="@+id/auth_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="24dp"
+            android:gravity="center_horizontal"
+            android:visibility="visible">
+
+            <ImageView
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_marginTop="40dp"
+                android:src="@drawable/ic_lock"
+                app:tint="@color/accent_green" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="Войдите в аккаунт"
+                android:textColor="@color/white"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_go_to_login"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:layout_marginTop="32dp"
+                android:text="Войти или Создать аккаунт"
+                android:textColor="@color/black"
+                app:backgroundTint="@color/accent_green"
+                app:cornerRadius="12dp" />
+        </LinearLayout>
+
+    </FrameLayout>
+</ScrollView>
