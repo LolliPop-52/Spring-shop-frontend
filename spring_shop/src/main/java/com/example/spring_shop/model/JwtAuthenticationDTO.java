@@ -7,6 +7,9 @@ public class JwtAuthenticationDTO {
     @SerializedName("token")
     private String token;
 
+    @SerializedName("refreshToken")
+    private String refreshToken;
+
     public JwtAuthenticationDTO() {}
 
     public String getToken() {
@@ -15,5 +18,13 @@ public class JwtAuthenticationDTO {
 
     public void setToken(String token) {
         this.token = token;
+    }
+
+    public String getRefreshToken() {
+        return refreshToken;
+    }
+
+    public void setRefreshToken(String refreshToken) {
+        this.refreshToken = refreshToken;
     }
 }

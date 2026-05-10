@@ -20,8 +20,11 @@ public class NetworkService {
         // Настраиваем клиент
         OkHttpClient client = new OkHttpClient.Builder()
                 .addInterceptor(interceptor)
-                .connectTimeout(30, TimeUnit.SECONDS) // Даем бэкенду время на ответ
-                .readTimeout(30, TimeUnit.SECONDS)
+                .authenticator(new TokenAuthenticator(context))
+                .connectTimeout(5, TimeUnit.SECONDS) // Уменьшено для быстрого отклика при отсутствии сети
+                .readTimeout(5, TimeUnit.SECONDS)
+                .writeTimeout(5, TimeUnit.SECONDS)
+                .retryOnConnectionFailure(false)
                 .build();
 
         mRetrofit = new Retrofit.Builder()

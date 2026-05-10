@@ -29,8 +29,14 @@ public class MainActivity extends AppCompatActivity {
 
         // Открываем главную страницу при старте
         if (savedInstanceState == null) {
-            getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.fragment_container, new HomeFragment()).commit();
+            if (getIntent() != null && getIntent().getBooleanExtra("OPEN_ACCOUNT_FRAGMENT", false)) {
+                bottomNav.setSelectedItemId(R.id.nav_account);
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.fragment_container, new AccountFragment()).commit();
+            } else {
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.fragment_container, new HomeFragment()).commit();
+            }
         }
 
         bottomNav.setOnItemSelectedListener(item -> {

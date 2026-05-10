@@ -78,6 +78,7 @@ public class ActiveSearchFragment extends Fragment {
                 .enqueue(new Callback<CategoryResponse>() {
                     @Override
                     public void onResponse(@NonNull Call<CategoryResponse> call, @NonNull Response<CategoryResponse> response) {
+                        if (!isAdded() || getContext() == null) return;
                         if (response.isSuccessful() && response.body() != null) {
                             categoryList.clear();
                             categoryList.addAll(response.body().getContent());
@@ -88,7 +89,9 @@ public class ActiveSearchFragment extends Fragment {
 
                     @Override
                     public void onFailure(@NonNull Call<CategoryResponse> call, @NonNull Throwable t) {
+                        if (!isAdded() || getContext() == null) return;
                         Log.e("DEBUG_TAG", "Load failed: " + t.getMessage());
+                        android.widget.Toast.makeText(getContext(), "Ошибка сети: нет подключения к серверу", android.widget.Toast.LENGTH_SHORT).show();
                     }
                 });
     }

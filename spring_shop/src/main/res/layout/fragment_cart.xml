@@ -1,32 +1,144 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/app_background">
 
-    <!-- Шапка корзины -->
-    <CheckBox
-        android:id="@+id/checkbox_select_all"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        android:text="Выбрать все" />
-
-    <!-- Список товаров в корзине -->
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/cart_recycler"
+    <!-- СОСТОЯНИЕ 1: КОРЗИНА (Авторизован) -->
+    <RelativeLayout
+        android:id="@+id/cart_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/order_button"
-        android:layout_below="@id/checkbox_select_all" />
+        android:visibility="gone">
 
-    <!-- Кнопка оформления -->
-    <Button
-        android:id="@+id/order_button"
+        <!-- Шапка корзины -->
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cart_header_card"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="10dp"
+            android:layout_marginTop="50dp"
+            android:layout_marginBottom="5dp"
+            app:cardBackgroundColor="@color/main_sapphire"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="0dp">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingHorizontal="12dp"
+                android:paddingVertical="8dp">
+
+                <androidx.appcompat.widget.AppCompatCheckBox
+                    android:id="@+id/checkbox_select_all"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_centerVertical="true"
+                    app:buttonTint="@color/checkbox_tint"
+                    android:text="Выбрать все"
+                    android:textColor="@color/text_gray_light" />
+
+                <Button
+                    android:id="@+id/btn_delete_all"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:backgroundTint="@android:color/transparent"
+                    android:text="Удалить все"
+                    android:textColor="#FF5252"
+                    android:insetTop="0dp"
+                    android:insetBottom="0dp"
+                    android:padding="0dp" />
+            </RelativeLayout>
+        </androidx.cardview.widget.CardView>
+
+        <!-- Список товаров в корзине -->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/cart_recycler"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@+id/order_card"
+            android:layout_below="@id/cart_header_card" />
+
+        <!-- Плитка оформления заказа -->
+        <androidx.cardview.widget.CardView
+            android:id="@+id/order_card"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginHorizontal="10dp"
+            android:layout_marginBottom="10dp"
+            app:cardBackgroundColor="@color/main_sapphire"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="0dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="12dp"
+                android:gravity="center_vertical">
+
+                <TextView
+                    android:id="@+id/selected_total_price"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="0 ₽"
+                    android:textColor="@color/accent_green"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/order_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="55dp"
+                    android:text="К оформлению"
+                    android:textColor="@color/black"
+                    app:backgroundTint="@color/accent_green"
+                    app:cornerRadius="8dp" />
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+    </RelativeLayout>
+
+    <!-- СОСТОЯНИЕ 2: ВХОД / РЕГИСТРАЦИЯ (Гость) -->
+    <LinearLayout
+        android:id="@+id/auth_layout"
         android:layout_width="match_parent"
-        android:layout_height="55dp"
-        android:layout_alignParentBottom="true"
-        android:layout_margin="10dp"
-        android:backgroundTint="@color/purple_500"
-        android:text="Заказать"
-        android:textColor="@android:color/white" />
-</RelativeLayout>
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="24dp"
+        android:gravity="center"
+        android:visibility="visible">
+
+        <ImageView
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:src="@drawable/ic_lock"
+            app:tint="@color/accent_green" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="Войдите, чтобы загрузить корзину"
+            android:textAlignment="center"
+            android:textColor="@color/white"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_go_to_login"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:layout_marginTop="32dp"
+            android:text="Войти или Создать аккаунт"
+            android:textColor="@color/black"
+            app:backgroundTint="@color/accent_green"
+            app:cornerRadius="12dp" />
+    </LinearLayout>
+
+</FrameLayout>

@@ -5,6 +5,7 @@ import com.google.gson.annotations.SerializedName;
 public class UserDTO {
     private Long id;
     private String password;
+    private String confirmPassword;
     private String name;
     private String email;
     private Long bucketId;
@@ -15,9 +16,10 @@ public class UserDTO {
     }
 
     // Полный конструктор
-    public UserDTO(Long id, String password, String name, String email, Long bucketId, String role) {
+    public UserDTO(Long id, String password, String confirmPassword, String name, String email, Long bucketId, String role) {
         this.id = id;
         this.password = password;
+        this.confirmPassword = confirmPassword;
         this.name = name;
         this.email = email;
         this.bucketId = bucketId;
@@ -30,6 +32,9 @@ public class UserDTO {
 
     public String getPassword() { return password; }
     public void setPassword(String password) { this.password = password; }
+
+    public String getConfirmPassword() { return confirmPassword; }
+    public void setConfirmPassword(String confirmPassword) { this.confirmPassword = confirmPassword; }
 
     public String getName() { return name; }
     public void setName(String name) { this.name = name; }

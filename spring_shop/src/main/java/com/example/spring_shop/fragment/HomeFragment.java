@@ -89,12 +89,13 @@ public class HomeFragment extends Fragment {
                 .enqueue(new Callback<PageResponse<ProductDTO>>() {
                     @Override
                     public void onResponse(@NonNull Call<PageResponse<ProductDTO>> call, @NonNull Response<PageResponse<ProductDTO>> response) {
+                        if (!isAdded() || getContext() == null) return;
                         if (response.isSuccessful() && response.body() != null) {
                             // Spring возвращает Page, где данные лежат в поле content
                             productList = response.body().getContent();
 
                             if (productList != null && !productList.isEmpty()) {
-                                adapter = new ProductAdapter(productList, requireContext());
+                                adapter = new ProductAdapter(productList, getContext());
                                 recyclerView.setAdapter(adapter);
                                 Log.d("NETWORK", "Загружено товаров: " + productList.size());
                             }
@@ -105,7 +106,9 @@ public class HomeFragment extends Fragment {
 
                     @Override
                     public void onFailure(@NonNull Call<PageResponse<ProductDTO>> call, @NonNull Throwable t) {
+                        if (!isAdded() || getContext() == null) return;
                         Log.e("NETWORK", "Ошибка сети (проверь, запущен ли Spring Boot): " + t.getMessage());
+                        android.widget.Toast.makeText(getContext(), "Ошибка сети: нет подключения к серверу", android.widget.Toast.LENGTH_SHORT).show();
                     }
                 });
     }

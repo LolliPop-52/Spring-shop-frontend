@@ -26,6 +26,15 @@
             android:name=".SearchActivity"
             android:exported="false"
             android:windowSoftInputMode="stateVisible" />
+        <activity
+            android:name=".EditProfileActivity"
+            android:exported="false" />
+        <activity
+            android:name=".LoginActivity"
+            android:exported="false" />
+        <activity
+            android:name=".RegisterActivity"
+            android:exported="false" />
     </application>
     <uses-permission android:name="android.permission.INTERNET" />
 </manifest>

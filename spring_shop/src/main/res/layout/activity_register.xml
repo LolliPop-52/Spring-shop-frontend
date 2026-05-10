@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="24dp"
+    android:background="@color/app_background">
+
+    <ImageButton
+        android:id="@+id/btn_back"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="-16dp"
+        android:layout_marginTop="-8dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:src="@drawable/ic_back"
+        app:tint="@color/white" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:layout_centerInParent="true">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Создать аккаунт"
+            android:textSize="28sp"
+            android:textStyle="bold"
+            android:textColor="@color/white"
+            android:layout_marginBottom="24dp" />
+
+        <EditText
+            android:id="@+id/et_name"
+            android:layout_width="match_parent"
+            android:layout_height="64dp"
+            android:hint="Имя"
+            android:textColor="@color/white"
+            android:textColorHint="#AAAAAA"
+            android:backgroundTint="#555555"
+            android:padding="16dp"
+            android:layout_marginBottom="16dp"
+            android:inputType="textPersonName" />
+
+        <EditText
+            android:id="@+id/et_email"
+            android:layout_width="match_parent"
+            android:layout_height="64dp"
+            android:hint="Email"
+            android:textColor="@color/white"
+            android:textColorHint="#AAAAAA"
+            android:backgroundTint="#555555"
+            android:padding="16dp"
+            android:layout_marginBottom="16dp"
+            android:inputType="textEmailAddress" />
+
+        <EditText
+            android:id="@+id/et_password"
+            android:layout_width="match_parent"
+            android:layout_height="64dp"
+            android:hint="Пароль"
+            android:textColor="@color/white"
+            android:textColorHint="#AAAAAA"
+            android:backgroundTint="#555555"
+            android:padding="16dp"
+            android:layout_marginBottom="16dp"
+            android:inputType="textPassword" />
+
+        <EditText
+            android:id="@+id/et_confirm_password"
+            android:layout_width="match_parent"
+            android:layout_height="64dp"
+            android:hint="Повторите пароль"
+            android:textColor="@color/white"
+            android:textColorHint="#AAAAAA"
+            android:backgroundTint="#555555"
+            android:padding="16dp"
+            android:layout_marginBottom="32dp"
+            android:inputType="textPassword" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_register"
+            android:layout_width="match_parent"
+            android:layout_height="64dp"
+            android:text="Зарегистрироваться"
+            android:textColor="@color/black"
+            app:backgroundTint="@color/accent_green"
+            app:cornerRadius="15dp" />
+
+        <Button
+            android:id="@+id/btn_go_to_login"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Уже есть аккаунт? Войти"
+            android:textColor="@color/white"
+            android:layout_marginTop="16dp" />
+
+    </LinearLayout>
+
+</RelativeLayout>

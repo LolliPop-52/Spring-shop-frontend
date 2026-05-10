@@ -13,17 +13,30 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.spring_shop.R;
 import com.example.spring_shop.model.ProductDTO;
+import com.example.spring_shop.model.ModifyBucketItemDTO;
+import com.example.spring_shop.model.BucketDTO;
+import com.example.spring_shop.api.MarketplaceApi;
+import com.example.spring_shop.api.NetworkService;
+import android.widget.Toast;
+import android.content.SharedPreferences;
 
+import java.math.BigDecimal;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductViewHolder> {
 
     private List<ProductDTO> products;
     private Context context;
+    private MarketplaceApi api;
 
     public ProductAdapter(List<ProductDTO> products, Context context) {
         this.products = products;
         this.context = context;
+        this.api = NetworkService.getInstance(context).getJSONApi();
     }
 
     @NonNull
@@ -40,7 +53,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
 
         // Наполняем текстовые поля данными из DTO
         holder.title.setText(product.getTitle());
-        holder.price.setText(product.getPrice().toString() + " ₽");
+        holder.price.setText(product.getPrice().intValue() + " ₽");
 
         // ИСПОЛЬЗУЕМ СТРОКУ imageUrl напрямую
         if (product.getImageUrl() != null && !product.getImageUrl().isEmpty()) {
@@ -48,11 +61,39 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
                     .load(product.getImageUrl()) // Больше никаких .get(0)
                     .centerCrop()
                     .placeholder(R.drawable.placeholder_gray)
-                    .error(R.drawable.error_image) // Поможет понять, если ссылка битая
+                    .error(R.drawable.placeholder_gray) // Поможет понять, если ссылка битая
                     .into(holder.image);
         } else {
             holder.image.setImageResource(R.drawable.placeholder_gray);
         }
+
+        holder.addToCartBtn.setOnClickListener(v -> {
+            SharedPreferences prefs = context.getSharedPreferences("AUTH_PREFS", Context.MODE_PRIVATE);
+            String token = prefs.getString("JWT_TOKEN", null);
+
+            if (token == null || token.isEmpty()) {
+                Toast.makeText(context, "Сначала войдите в аккаунт", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            ModifyBucketItemDTO item = new ModifyBucketItemDTO(product.getId(), new BigDecimal("1"));
+            Call<BucketDTO> call = api.addBucketItem("Bearer " + token, item);
+            call.enqueue(new Callback<BucketDTO>() {
+                @Override
+                public void onResponse(Call<BucketDTO> call, Response<BucketDTO> response) {
+                    if (response.isSuccessful()) {
+                        Toast.makeText(context, "Добавлено в корзину", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(context, "Ошибка добавления", Toast.LENGTH_SHORT).show();
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<BucketDTO> call, Throwable t) {
+                    Toast.makeText(context, "Ошибка сети", Toast.LENGTH_SHORT).show();
+                }
+            });
+        });
     }
 
 
@@ -65,12 +106,14 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
     public static class ProductViewHolder extends RecyclerView.ViewHolder {
         ImageView image;
         TextView title, price;
+        androidx.appcompat.widget.AppCompatButton addToCartBtn;
 
         public ProductViewHolder(@NonNull View itemView) {
             super(itemView);
             image = itemView.findViewById(R.id.product_image);
             title = itemView.findViewById(R.id.product_title);
             price = itemView.findViewById(R.id.product_price);
+            addToCartBtn = itemView.findViewById(R.id.add_to_cart_btn);
         }
     }
 }

@@ -29,7 +29,7 @@ public class AccountFragment extends Fragment {
 
     private LinearLayout profileLayout, authLayout;
     private TextView tvName, tvEmail;
-    private MaterialButton btnEditProfile, btnGoToLogin;
+    private MaterialButton btnEditProfile, btnGoToLogin, btnActionCart, btnActionOrders;
     private Button btnLogout;
 
     @Nullable
@@ -50,12 +50,20 @@ public class AccountFragment extends Fragment {
         btnEditProfile = view.findViewById(R.id.btn_edit_profile);
         btnGoToLogin = view.findViewById(R.id.btn_go_to_login);
         btnLogout = view.findViewById(R.id.btn_logout);
+        btnActionCart = view.findViewById(R.id.btn_action_cart);
+        btnActionOrders = view.findViewById(R.id.btn_action_orders);
 
         // Проверка авторизации при создании экрана
         checkAuthStatus();
 
         // Слушатели кнопок
         setupClickListeners();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        checkAuthStatus();
     }
 
     private void checkAuthStatus() {
@@ -79,6 +87,7 @@ public class AccountFragment extends Fragment {
                 .enqueue(new Callback<UserDTO>() {
                     @Override
                     public void onResponse(@NonNull Call<UserDTO> call, @NonNull Response<UserDTO> response) {
+                        if (!isAdded() || getContext() == null) return;
                         if (response.isSuccessful() && response.body() != null) {
                             displayUserData(response.body());
                         } else {
@@ -89,6 +98,7 @@ public class AccountFragment extends Fragment {
 
                     @Override
                     public void onFailure(@NonNull Call<UserDTO> call, @NonNull Throwable t) {
+                        if (!isAdded() || getContext() == null) return;
                         Toast.makeText(getContext(), "Ошибка сети: " + t.getMessage(), Toast.LENGTH_SHORT).show();
                         showGuestState();
                     }
@@ -111,15 +121,28 @@ public class AccountFragment extends Fragment {
     private void setupClickListeners() {
         // Кнопка входа/регистрации
         btnGoToLogin.setOnClickListener(v -> {
-            // Тут открываешь свою Activity для логина (LoginActivity)
-            // Intent intent = new Intent(getActivity(), LoginActivity.class);
-            // startActivity(intent);
+            Intent intent = new Intent(getActivity(), com.example.spring_shop.LoginActivity.class);
+            startActivity(intent);
+        });
+
+        // Моя корзина - переключаем навигацию в MainActivity
+        btnActionCart.setOnClickListener(v -> {
+            com.google.android.material.bottomnavigation.BottomNavigationView bottomNav = 
+                requireActivity().findViewById(R.id.bottom_navigation);
+            if (bottomNav != null) {
+                bottomNav.setSelectedItemId(R.id.nav_cart);
+            }
+        });
+
+        // Заказы (пока никуда не ведет)
+        btnActionOrders.setOnClickListener(v -> {
+            Toast.makeText(getContext(), "Раздел заказов в разработке", Toast.LENGTH_SHORT).show();
         });
 
         // Кнопка изменения данных
         btnEditProfile.setOnClickListener(v -> {
-            // Логика открытия режима редактирования
-            Toast.makeText(getContext(), "Режим редактирования", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(getActivity(), com.example.spring_shop.EditProfileActivity.class);
+            startActivity(intent);
         });
 
         // Выход из аккаунта

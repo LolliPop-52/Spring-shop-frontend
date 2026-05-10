@@ -6,6 +6,7 @@
     <color name="accent_green">#A8E4A0</color>         <!-- Зеленый акцент -->
     <color name="price_antique">#FAEBD7</color>        <!-- Цвет цены -->
     <color name="text_white">#FFFFFF</color>           <!-- Белый текст -->
+    <color name="text_gray_light">#B0B0B0</color>      <!-- Светло-серый текст -->
 
     <!-- Для совместимости с системой -->
     <color name="black">#000000</color>
