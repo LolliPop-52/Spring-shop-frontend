@@ -24,7 +24,7 @@ public class NetworkService {
                 .connectTimeout(5, TimeUnit.SECONDS) // Уменьшено для быстрого отклика при отсутствии сети
                 .readTimeout(5, TimeUnit.SECONDS)
                 .writeTimeout(5, TimeUnit.SECONDS)
-                .retryOnConnectionFailure(false)
+                .retryOnConnectionFailure(true)
                 .build();
 
         mRetrofit = new Retrofit.Builder()

@@ -49,18 +49,22 @@ android:paddingTop="18dp">
         android:textSize="18sp"
         android:textStyle="bold" />
 
-    <androidx.appcompat.widget.AppCompatButton
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/add_to_cart_btn"
-        android:layout_width="38dp"
-        android:layout_height="38dp"
-        android:backgroundTint="@color/accent_green"
-        android:gravity="center"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        app:backgroundTint="@color/accent_green"
+        android:insetLeft="0dp"
+        android:insetTop="0dp"
+        android:insetRight="0dp"
+        android:insetBottom="0dp"
+        app:cornerRadius="8dp"
         android:padding="0dp"
-        android:includeFontPadding="false"
-        android:text="+"
-        android:textColor="@color/main_sapphire"
-        android:textSize="22sp"
-        android:textStyle="bold" />
+        app:iconPadding="0dp"
+        app:iconGravity="textStart"
+        app:iconSize="20dp"
+        app:iconTint="@color/main_sapphire"
+        android:text="" />
 </LinearLayout>
 
 <!-- Название товара -->

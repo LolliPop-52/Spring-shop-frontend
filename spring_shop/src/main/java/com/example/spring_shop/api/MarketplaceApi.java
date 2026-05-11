@@ -36,6 +36,9 @@ public interface MarketplaceApi {
     @POST("/api/v1/auth/refresh")
     Call<JwtAuthenticationDTO> refresh(@Body com.example.spring_shop.model.RefreshTokenDTO refreshTokenDTO);
 
+    @GET("/api/v1/product/{id}")
+    Call<ProductDTO> getProductById(@retrofit2.http.Path("id") Long id);
+
     @GET("/api/v1/product/search")
     Call<PageResponse<ProductDTO>> searchProducts(
             @Query("query") String query,
@@ -63,4 +66,13 @@ public interface MarketplaceApi {
 
     @DELETE("/api/v1/bucket/clear")
     Call<com.example.spring_shop.model.BucketDTO> clearBucket(@Header("Authorization") String token);
+
+    @POST("/api/v1/order/new")
+    Call<com.example.spring_shop.model.OrderDTO> newOrder(@Header("Authorization") String token, @Body com.example.spring_shop.model.CreatorNewOrderDTO creatorNewOrderDTO);
+
+    @GET("/api/v1/order/orders")
+    Call<com.example.spring_shop.model.ActiveOrdersDTO> getMyOrders(@Header("Authorization") String token);
+
+    @GET("/api/v1/order/pickup-points")
+    Call<PageResponse<com.example.spring_shop.model.PickupPointDTO>> getAllPickupPoints(@Query("page") int page, @Query("size") int size);
 }

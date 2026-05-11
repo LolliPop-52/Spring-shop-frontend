@@ -27,16 +27,8 @@ public class MainActivity extends AppCompatActivity {
         navView.setItemActiveIndicatorEnabled(false);
 
 
-        // Открываем главную страницу при старте
         if (savedInstanceState == null) {
-            if (getIntent() != null && getIntent().getBooleanExtra("OPEN_ACCOUNT_FRAGMENT", false)) {
-                bottomNav.setSelectedItemId(R.id.nav_account);
-                getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.fragment_container, new AccountFragment()).commit();
-            } else {
-                getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.fragment_container, new HomeFragment()).commit();
-            }
+            handleIntent(getIntent(), bottomNav);
         }
 
         bottomNav.setOnItemSelectedListener(item -> {
@@ -54,5 +46,30 @@ public class MainActivity extends AppCompatActivity {
             }
             return true;
         });
+    }
+
+    @Override
+    protected void onNewIntent(android.content.Intent intent) {
+        super.onNewIntent(intent);
+        setIntent(intent);
+        BottomNavigationView bottomNav = findViewById(R.id.bottom_navigation);
+        handleIntent(intent, bottomNav);
+    }
+
+    private void handleIntent(android.content.Intent intent, BottomNavigationView bottomNav) {
+        if (intent == null) return;
+
+        if (intent.getBooleanExtra("OPEN_ACCOUNT_FRAGMENT", false)) {
+            bottomNav.setSelectedItemId(R.id.nav_account);
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.fragment_container, new AccountFragment()).commit();
+        } else if ("CART".equals(intent.getStringExtra("NAVIGATE_TO"))) {
+            bottomNav.setSelectedItemId(R.id.nav_cart);
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.fragment_container, new CartFragment()).commit();
+        } else if (getSupportFragmentManager().findFragmentById(R.id.fragment_container) == null) {
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.fragment_container, new HomeFragment()).commit();
+        }
     }
 }

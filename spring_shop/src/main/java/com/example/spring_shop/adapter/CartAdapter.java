@@ -79,16 +79,19 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
 
     public void setBucketItems(List<BucketItemDTO> bucketItems) {
         this.bucketItems = bucketItems != null ? bucketItems : new ArrayList<>();
-        Set<Long> validIds = new HashSet<>();
+        Set<Long> currentIds = new HashSet<>();
         for (BucketItemDTO item : this.bucketItems) {
-            validIds.add(item.getSmallProductDTO().getId());
+            Long id = item.getSmallProductDTO().getId();
+            currentIds.add(id);
+            // Auto check new items
+            selectedProductIds.add(id);
         }
-        selectedProductIds.retainAll(validIds);
+        selectedProductIds.retainAll(currentIds);
         notifyDataSetChanged();
         checkSelectionState();
     }
 
-    public void selectAll(boolean select) {
+    public List<BucketItemDTO> getSelectedItems() { List<BucketItemDTO> selected = new ArrayList<>(); for (BucketItemDTO item : bucketItems) { if (selectedProductIds.contains(item.getSmallProductDTO().getId())) { selected.add(item); } } return selected; }    public void selectAll(boolean select) {
         selectedProductIds.clear();
         if (select) {
             for (BucketItemDTO item : bucketItems) {
@@ -146,6 +149,14 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
         } else {
             holder.image.setImageResource(R.drawable.placeholder_gray);
         }
+
+        View.OnClickListener openDetail = v -> {
+            android.content.Intent intent = new android.content.Intent(context, com.example.spring_shop.ProductDetailActivity.class);
+            intent.putExtra("PRODUCT_ID", product.getId());
+            context.startActivity(intent);
+        };
+        holder.image.setOnClickListener(openDetail);
+        holder.title.setOnClickListener(openDetail);
 
         holder.checkboxItem.setOnCheckedChangeListener(null);
         holder.checkboxItem.setChecked(selectedProductIds.contains(product.getId()));

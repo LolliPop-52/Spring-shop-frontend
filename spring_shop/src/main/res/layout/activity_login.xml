@@ -48,22 +48,30 @@
             android:hint="Email"
             android:textColor="@color/white"
             android:textColorHint="#AAAAAA"
-            android:backgroundTint="#555555"
+            android:background="@drawable/edit_text_background"
             android:padding="16dp"
             android:layout_marginBottom="16dp"
             android:inputType="textEmailAddress" />
 
-        <EditText
-            android:id="@+id/et_password"
+        <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
-            android:layout_height="64dp"
-            android:hint="Пароль"
-            android:textColor="@color/white"
-            android:textColorHint="#AAAAAA"
-            android:backgroundTint="#555555"
-            android:padding="16dp"
+            android:layout_height="wrap_content"
             android:layout_marginBottom="32dp"
-            android:inputType="textPassword" />
+            app:hintEnabled="false"
+            app:passwordToggleEnabled="true"
+            app:passwordToggleTint="@color/white">
+
+            <EditText
+                android:id="@+id/et_password"
+                android:layout_width="match_parent"
+                android:layout_height="64dp"
+                android:hint="Пароль"
+                android:textColor="@color/white"
+                android:textColorHint="#AAAAAA"
+                android:background="@drawable/edit_text_background"
+                android:padding="16dp"
+                android:inputType="textPassword" />
+        </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_login"

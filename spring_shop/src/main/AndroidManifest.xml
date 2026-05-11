@@ -35,6 +35,9 @@
         <activity
             android:name=".RegisterActivity"
             android:exported="false" />
+        <activity android:name=".CheckoutActivity" />
+        <activity android:name=".OrdersActivity" />
+        <activity android:name=".ProductDetailActivity" />
     </application>
     <uses-permission android:name="android.permission.INTERNET" />
 </manifest>

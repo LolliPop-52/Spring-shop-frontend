@@ -179,7 +179,7 @@ public class CartFragment extends Fragment {
             cartAdapter.setBucketItems(new java.util.ArrayList<>());
             selectedTotalPriceView.setText("0 ₽");
         } else {
-            orderButton.setEnabled(true);
+            orderButton.setEnabled(true); orderButton.setOnClickListener(v -> { java.util.List<com.example.spring_shop.model.BucketItemDTO> items = cartAdapter.getSelectedItems(); if (items.isEmpty()) { Toast.makeText(getContext(), "Выберите товары", Toast.LENGTH_SHORT).show(); return; } String json = new com.google.gson.Gson().toJson(items); Intent i = new Intent(getActivity(), com.example.spring_shop.CheckoutActivity.class); i.putExtra("SELECTED_ITEMS", json); startActivity(i); });
             orderButton.setText("К оформлению");
             cartAdapter.setBucketItems(bucket.getItems());
         }

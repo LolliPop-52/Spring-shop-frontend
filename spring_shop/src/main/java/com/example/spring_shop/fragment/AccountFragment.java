@@ -30,7 +30,7 @@ public class AccountFragment extends Fragment {
     private LinearLayout profileLayout, authLayout;
     private TextView tvName, tvEmail;
     private MaterialButton btnEditProfile, btnGoToLogin, btnActionCart, btnActionOrders;
-    private Button btnLogout;
+    private com.google.android.material.button.MaterialButton btnLogout;
 
     @Nullable
     @Override
@@ -72,6 +72,7 @@ public class AccountFragment extends Fragment {
         String token = prefs.getString("JWT_TOKEN", null);
 
         if (token != null && !token.isEmpty()) {
+            // Если токен есть, пока не показываем гостевой экран, ждем загрузки
             loadUserProfile(token);
         } else {
             showGuestState();
@@ -99,8 +100,7 @@ public class AccountFragment extends Fragment {
                     @Override
                     public void onFailure(@NonNull Call<UserDTO> call, @NonNull Throwable t) {
                         if (!isAdded() || getContext() == null) return;
-                        Toast.makeText(getContext(), "Ошибка сети: " + t.getMessage(), Toast.LENGTH_SHORT).show();
-                        showGuestState();
+                        Toast.makeText(getContext(), "Ошибка сети: " + t.getMessage(), Toast.LENGTH_SHORT).show(); // showGuestState removed
                     }
                 });
     }
@@ -119,13 +119,11 @@ public class AccountFragment extends Fragment {
     }
 
     private void setupClickListeners() {
-        // Кнопка входа/регистрации
         btnGoToLogin.setOnClickListener(v -> {
             Intent intent = new Intent(getActivity(), com.example.spring_shop.LoginActivity.class);
             startActivity(intent);
         });
 
-        // Моя корзина - переключаем навигацию в MainActivity
         btnActionCart.setOnClickListener(v -> {
             com.google.android.material.bottomnavigation.BottomNavigationView bottomNav = 
                 requireActivity().findViewById(R.id.bottom_navigation);
@@ -134,21 +132,19 @@ public class AccountFragment extends Fragment {
             }
         });
 
-        // Заказы (пока никуда не ведет)
         btnActionOrders.setOnClickListener(v -> {
-            Toast.makeText(getContext(), "Раздел заказов в разработке", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(getActivity(), com.example.spring_shop.OrdersActivity.class);
+            startActivity(intent);
         });
 
-        // Кнопка изменения данных
         btnEditProfile.setOnClickListener(v -> {
             Intent intent = new Intent(getActivity(), com.example.spring_shop.EditProfileActivity.class);
             startActivity(intent);
         });
 
-        // Выход из аккаунта
         btnLogout.setOnClickListener(v -> {
             SharedPreferences prefs = requireContext().getSharedPreferences("AUTH_PREFS", Context.MODE_PRIVATE);
-            prefs.edit().remove("JWT_TOKEN").apply(); // Удаляем токен
+            prefs.edit().remove("JWT_TOKEN").apply();
             showGuestState();
         });
     }
