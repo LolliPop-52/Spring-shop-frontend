@@ -42,7 +42,6 @@ public class ActiveSearchFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        // Клик по плашке открывает SearchActivity
         View searchTrigger = view.findViewById(R.id.search_bar_trigger);
         if (searchTrigger != null) {
             searchTrigger.setOnClickListener(v -> {
@@ -54,12 +53,10 @@ public class ActiveSearchFragment extends Fragment {
             });
         }
 
-        // Настройка RecyclerView для плитки
         recyclerView = view.findViewById(R.id.categories_recycler);
         if (recyclerView != null) {
             recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
 
-            // Важно: передаем слушатель клика, чтобы открывать поиск по категории
             adapter = new CategoryAdapter(categoryList, category -> {
                 Intent intent = new Intent(getActivity(), SearchActivity.class);
                 intent.putExtra("CATEGORY_TITLE", category.getTitle());
@@ -67,7 +64,7 @@ public class ActiveSearchFragment extends Fragment {
             });
             recyclerView.setAdapter(adapter);
 
-            loadCategories(); // Запуск загрузки
+            loadCategories();
         }
     }
 
