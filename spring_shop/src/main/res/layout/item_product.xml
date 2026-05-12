@@ -51,8 +51,8 @@ android:paddingTop="18dp">
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/add_to_cart_btn"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
+        android:layout_width="38dp"
+        android:layout_height="38dp"
         app:backgroundTint="@color/accent_green"
         android:insetLeft="0dp"
         android:insetTop="0dp"

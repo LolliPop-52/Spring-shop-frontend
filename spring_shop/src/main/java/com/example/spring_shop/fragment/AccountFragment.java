@@ -27,10 +27,10 @@ import retrofit2.Response;
 
 public class AccountFragment extends Fragment {
 
-    private LinearLayout profileLayout, authLayout;
-    private TextView tvName, tvEmail;
+    private LinearLayout profileLayout, authLayout, unverifiedLayout;
+    private TextView tvName, tvEmail, tvUnverifiedEmail;
     private MaterialButton btnEditProfile, btnGoToLogin, btnActionCart, btnActionOrders;
-    private com.google.android.material.button.MaterialButton btnLogout;
+    private com.google.android.material.button.MaterialButton btnLogout, btnLogoutUnverified;
 
     @Nullable
     @Override
@@ -45,11 +45,14 @@ public class AccountFragment extends Fragment {
         // Инициализация UI
         profileLayout = view.findViewById(R.id.profile_layout);
         authLayout = view.findViewById(R.id.auth_layout);
+        unverifiedLayout = view.findViewById(R.id.unverified_layout);
         tvName = view.findViewById(R.id.user_name_display);
         tvEmail = view.findViewById(R.id.user_email_display);
+        tvUnverifiedEmail = view.findViewById(R.id.tv_unverified_email);
         btnEditProfile = view.findViewById(R.id.btn_edit_profile);
         btnGoToLogin = view.findViewById(R.id.btn_go_to_login);
         btnLogout = view.findViewById(R.id.btn_logout);
+        btnLogoutUnverified = view.findViewById(R.id.btn_logout_unverified);
         btnActionCart = view.findViewById(R.id.btn_action_cart);
         btnActionOrders = view.findViewById(R.id.btn_action_orders);
 
@@ -106,16 +109,34 @@ public class AccountFragment extends Fragment {
     }
 
     private void displayUserData(UserDTO user) {
+        // Сохраняем статус подтверждения почты
+        SharedPreferences prefs = requireContext().getSharedPreferences("AUTH_PREFS", Context.MODE_PRIVATE);
+        prefs.edit().putBoolean("USER_ENABLED", user.isEnabled()).apply();
+
+        if (!user.isEnabled()) {
+            showUnverifiedState(user.getEmail());
+            return;
+        }
+
         tvName.setText(user.getName());
         tvEmail.setText(user.getEmail());
 
         authLayout.setVisibility(View.GONE);
+        unverifiedLayout.setVisibility(View.GONE);
         profileLayout.setVisibility(View.VISIBLE);
     }
 
     private void showGuestState() {
         profileLayout.setVisibility(View.GONE);
+        unverifiedLayout.setVisibility(View.GONE);
         authLayout.setVisibility(View.VISIBLE);
+    }
+
+    private void showUnverifiedState(String email) {
+        tvUnverifiedEmail.setText(email);
+        profileLayout.setVisibility(View.GONE);
+        authLayout.setVisibility(View.GONE);
+        unverifiedLayout.setVisibility(View.VISIBLE);
     }
 
     private void setupClickListeners() {
@@ -142,10 +163,13 @@ public class AccountFragment extends Fragment {
             startActivity(intent);
         });
 
-        btnLogout.setOnClickListener(v -> {
+        View.OnClickListener logoutListener = v -> {
             SharedPreferences prefs = requireContext().getSharedPreferences("AUTH_PREFS", Context.MODE_PRIVATE);
-            prefs.edit().remove("JWT_TOKEN").apply();
+            prefs.edit().remove("JWT_TOKEN").remove("USER_ENABLED").apply();
             showGuestState();
-        });
+        };
+
+        btnLogout.setOnClickListener(logoutListener);
+        btnLogoutUnverified.setOnClickListener(logoutListener);
     }
 }

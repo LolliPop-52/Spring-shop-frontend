@@ -13,6 +13,14 @@ import com.example.spring_shop.fragment.HomeFragment;
 import com.example.spring_shop.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import com.example.spring_shop.api.NetworkService;
+import com.example.spring_shop.model.UserDTO;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import android.content.Context;
+import android.content.SharedPreferences;
+
 public class MainActivity extends AppCompatActivity {
 
     @Override
@@ -26,6 +34,7 @@ public class MainActivity extends AppCompatActivity {
 // Отключаем внутренний механизм отрисовки индикатора
         navView.setItemActiveIndicatorEnabled(false);
 
+        checkUserStatus();
 
         if (savedInstanceState == null) {
             handleIntent(getIntent(), bottomNav);
@@ -54,6 +63,28 @@ public class MainActivity extends AppCompatActivity {
         setIntent(intent);
         BottomNavigationView bottomNav = findViewById(R.id.bottom_navigation);
         handleIntent(intent, bottomNav);
+    }
+
+    private void checkUserStatus() {
+        SharedPreferences prefs = getSharedPreferences("AUTH_PREFS", Context.MODE_PRIVATE);
+        String token = prefs.getString("JWT_TOKEN", null);
+
+        if (token != null && !token.isEmpty()) {
+            NetworkService.getInstance(this).getJSONApi()
+                    .getCurrentUser("Bearer " + token)
+                    .enqueue(new Callback<UserDTO>() {
+                        @Override
+                        public void onResponse(Call<UserDTO> call, Response<UserDTO> response) {
+                            if (response.isSuccessful() && response.body() != null) {
+                                boolean enabled = response.body().isEnabled();
+                                prefs.edit().putBoolean("USER_ENABLED", enabled).apply();
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<UserDTO> call, Throwable t) {}
+                    });
+        }
     }
 
     private void handleIntent(android.content.Intent intent, BottomNavigationView bottomNav) {

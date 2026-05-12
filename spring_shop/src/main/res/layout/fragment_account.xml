@@ -91,6 +91,51 @@
                 android:textColor="#FF5252" />
         </LinearLayout>
 
+        <!-- СОСТОЯНИЕ 3: НЕ ПОДТВЕРЖДЕНА ПОЧТА -->
+        <LinearLayout
+            android:id="@+id/unverified_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            android:padding="24dp"
+            android:visibility="gone">
+
+            <ImageView
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_marginTop="40dp"
+                android:src="@drawable/ic_lock"
+                app:tint="@color/accent_green" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:text="Нужно подтвердить почту"
+                android:textColor="@color/white"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tv_unverified_email"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="example@mail.com"
+                android:textColor="#AAAAAA"
+                android:textSize="16sp" />
+
+            <Button
+                android:id="@+id/btn_logout_unverified"
+                style="@style/Widget.MaterialComponents.Button.TextButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="40dp"
+                android:text="Выйти из аккаунта"
+                android:textColor="#FF5252" />
+        </LinearLayout>
+
         <!-- СОСТОЯНИЕ 2: ВХОД / РЕГИСТРАЦИЯ (Гость) -->
         <LinearLayout
             android:id="@+id/auth_layout"

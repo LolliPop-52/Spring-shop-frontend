@@ -109,9 +109,15 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
         holder.addToCartBtn.setOnClickListener(v -> {
             SharedPreferences prefs = context.getSharedPreferences("AUTH_PREFS", Context.MODE_PRIVATE);
             String token = prefs.getString("JWT_TOKEN", null);
+            boolean isEnabled = prefs.getBoolean("USER_ENABLED", false);
 
             if (token == null || token.isEmpty()) {
                 Toast.makeText(context, "Сначала войдите в аккаунт", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            if (!isEnabled) {
+                Toast.makeText(context, "Подтвердите почту для совершения покупок", Toast.LENGTH_SHORT).show();
                 return;
             }
 

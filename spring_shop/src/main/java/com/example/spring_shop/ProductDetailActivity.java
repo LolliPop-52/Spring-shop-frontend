@@ -189,9 +189,15 @@ public class ProductDetailActivity extends AppCompatActivity {
     private void addToCart() {
         SharedPreferences prefs = getSharedPreferences("AUTH_PREFS", MODE_PRIVATE);
         String token = prefs.getString("JWT_TOKEN", null);
+        boolean isEnabled = prefs.getBoolean("USER_ENABLED", false);
 
         if (token == null) {
             Toast.makeText(this, "Сначала войдите в аккаунт", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if (!isEnabled) {
+            Toast.makeText(this, "Подтвердите почту для совершения покупок", Toast.LENGTH_SHORT).show();
             return;
         }
 

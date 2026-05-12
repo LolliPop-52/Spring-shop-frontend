@@ -104,20 +104,58 @@
         </androidx.cardview.widget.CardView>
     </RelativeLayout>
 
+    <!-- СОСТОЯНИЕ 3: НЕ ПОДТВЕРЖДЕНА ПОЧТА -->
+    <LinearLayout
+        android:id="@+id/unverified_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="24dp"
+        android:gravity="center_horizontal"
+        android:visibility="gone">
+
+        <ImageView
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_marginTop="40dp"
+            android:src="@drawable/ic_lock"
+            app:tint="@color/accent_green" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:text="Нужно подтвердить почту"
+            android:textAlignment="center"
+            android:textColor="@color/white"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_go_to_account"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:layout_marginTop="32dp"
+            android:text="Перейти в профиль"
+            android:textColor="@color/black"
+            app:backgroundTint="@color/accent_green"
+            app:cornerRadius="12dp" />
+    </LinearLayout>
+
     <!-- СОСТОЯНИЕ 2: ВХОД / РЕГИСТРАЦИЯ (Гость) -->
     <LinearLayout
         android:id="@+id/auth_layout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical"
         android:padding="24dp"
-        android:gravity="top|center_horizontal"
+        android:gravity="center_horizontal"
         android:visibility="gone">
 
         <ImageView
             android:layout_width="80dp"
             android:layout_height="80dp"
-            android:layout_marginTop="80dp"
+            android:layout_marginTop="40dp"
             android:src="@drawable/ic_lock"
             app:tint="@color/accent_green" />
 

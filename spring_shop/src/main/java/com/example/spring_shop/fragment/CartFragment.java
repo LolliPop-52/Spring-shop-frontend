@@ -35,8 +35,8 @@ import retrofit2.Response;
 public class CartFragment extends Fragment {
 
     private RelativeLayout cartLayout;
-    private LinearLayout authLayout;
-    private MaterialButton btnGoToLogin;
+    private LinearLayout authLayout, unverifiedLayout;
+    private MaterialButton btnGoToLogin, btnGoToAccount;
     
     private RecyclerView cartRecycler;
     private CartAdapter cartAdapter;
@@ -57,7 +57,9 @@ public class CartFragment extends Fragment {
 
         cartLayout = view.findViewById(R.id.cart_layout);
         authLayout = view.findViewById(R.id.auth_layout);
+        unverifiedLayout = view.findViewById(R.id.unverified_layout);
         btnGoToLogin = view.findViewById(R.id.btn_go_to_login);
+        btnGoToAccount = view.findViewById(R.id.btn_go_to_account);
         
         cartRecycler = view.findViewById(R.id.cart_recycler);
         cartRecycler.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -71,6 +73,14 @@ public class CartFragment extends Fragment {
         btnGoToLogin.setOnClickListener(v -> {
             Intent intent = new Intent(getActivity(), LoginActivity.class);
             startActivity(intent);
+        });
+
+        btnGoToAccount.setOnClickListener(v -> {
+            com.google.android.material.bottomnavigation.BottomNavigationView bottomNav = 
+                requireActivity().findViewById(R.id.bottom_navigation);
+            if (bottomNav != null) {
+                bottomNav.setSelectedItemId(R.id.nav_account);
+            }
         });
 
         checkboxSelectAll.setOnClickListener(v -> {
@@ -131,13 +141,57 @@ public class CartFragment extends Fragment {
         String token = prefs.getString("JWT_TOKEN", null);
 
         if (token != null && !token.isEmpty()) {
-            cartLayout.setVisibility(View.VISIBLE);
-            authLayout.setVisibility(View.GONE);
-            loadCartData(token);
+            checkUserEnabled(token);
         } else {
-            cartLayout.setVisibility(View.GONE);
-            authLayout.setVisibility(View.VISIBLE);
+            showGuestState();
         }
+    }
+
+    private void checkUserEnabled(String token) {
+        NetworkService.getInstance(requireContext())
+                .getJSONApi()
+                .getCurrentUser("Bearer " + token)
+                .enqueue(new Callback<com.example.spring_shop.model.UserDTO>() {
+                    @Override
+                    public void onResponse(@NonNull Call<com.example.spring_shop.model.UserDTO> call, @NonNull Response<com.example.spring_shop.model.UserDTO> response) {
+                        if (!isAdded() || getContext() == null) return;
+                        if (response.isSuccessful() && response.body() != null) {
+                            com.example.spring_shop.model.UserDTO user = response.body();
+                            if (!user.isEnabled()) {
+                                showUnverifiedState();
+                            } else {
+                                showCartState(token);
+                            }
+                        } else {
+                            showGuestState();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(@NonNull Call<com.example.spring_shop.model.UserDTO> call, @NonNull Throwable t) {
+                        if (!isAdded() || getContext() == null) return;
+                        Toast.makeText(getContext(), "Ошибка сети", Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
+
+    private void showGuestState() {
+        cartLayout.setVisibility(View.GONE);
+        unverifiedLayout.setVisibility(View.GONE);
+        authLayout.setVisibility(View.VISIBLE);
+    }
+
+    private void showUnverifiedState() {
+        cartLayout.setVisibility(View.GONE);
+        authLayout.setVisibility(View.GONE);
+        unverifiedLayout.setVisibility(View.VISIBLE);
+    }
+
+    private void showCartState(String token) {
+        cartLayout.setVisibility(View.VISIBLE);
+        authLayout.setVisibility(View.GONE);
+        unverifiedLayout.setVisibility(View.GONE);
+        loadCartData(token);
     }
     
     private void loadCartData(String token) {
