@@ -113,6 +113,7 @@ public class SearchActivity extends AppCompatActivity {
     private void filterCategories(String query) {
         filteredTitles.clear();
         for (CategoryDTO cat : allCategories) {
+            // Здесь мы берем строку через cat.getTitle() и кладем в список строк
             if (cat.getTitle().toLowerCase().contains(query)) {
                 filteredTitles.add(cat.getTitle());
             }

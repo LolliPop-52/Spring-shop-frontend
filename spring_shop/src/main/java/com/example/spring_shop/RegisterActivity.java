@@ -86,7 +86,8 @@ public class RegisterActivity extends AppCompatActivity {
                 if (response.isSuccessful() && response.body() != null) {
                     saveToken(response.body().getToken(), response.body().getRefreshToken());
                     Toast.makeText(RegisterActivity.this, "Успешная регистрация", Toast.LENGTH_SHORT).show();
-
+                    
+                    // Return to MainActivity which will update AccountFragment
                     startActivity(new Intent(RegisterActivity.this, MainActivity.class));
                     finish();
                 } else {

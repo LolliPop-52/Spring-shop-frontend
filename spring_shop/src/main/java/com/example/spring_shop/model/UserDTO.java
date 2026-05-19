@@ -12,9 +12,11 @@ public class UserDTO {
     private String role;
     private boolean enabled = false;
 
+    // Пустой конструктор (нужен для GSON/Retrofit)
     public UserDTO() {
     }
 
+    // Полный конструктор
     public UserDTO(Long id, String password, String confirmPassword, String name, String email, Long bucketId, String role, boolean enabled) {
         this.id = id;
         this.password = password;
@@ -26,6 +28,7 @@ public class UserDTO {
         this.enabled = enabled;
     }
 
+    // Геттеры и Сеттеры
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 

@@ -13,15 +13,15 @@ public class NetworkService {
     private Retrofit mRetrofit;
 
     private NetworkService(Context context) {
-
+        // Добавляем логгер, чтобы видеть запросы в Logcat
         HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
         interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
 
-
+        // Настраиваем клиент
         OkHttpClient client = new OkHttpClient.Builder()
                 .addInterceptor(interceptor)
                 .authenticator(new TokenAuthenticator(context))
-                .connectTimeout(5, TimeUnit.SECONDS)
+                .connectTimeout(5, TimeUnit.SECONDS) // Уменьшено для быстрого отклика при отсутствии сети
                 .readTimeout(5, TimeUnit.SECONDS)
                 .writeTimeout(5, TimeUnit.SECONDS)
                 .retryOnConnectionFailure(true)
@@ -29,14 +29,14 @@ public class NetworkService {
 
         mRetrofit = new Retrofit.Builder()
                 .baseUrl(BASE_URL)
-                .client(client)
+                .client(client) // Привязываем клиент к Retrofit
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
     }
 
     public static synchronized NetworkService getInstance(Context context) {
         if (mInstance == null) {
-
+            // Используем applicationContext для предотвращения утечек памяти
             mInstance = new NetworkService(context.getApplicationContext());
         }
         return mInstance;

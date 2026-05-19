@@ -47,18 +47,21 @@ public class HomeFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-
+        // --- Инициализация поиска ---
         LinearLayout searchContainer = view.findViewById(R.id.search_view_container);
         EditText searchInput = view.findViewById(R.id.search_view);
 
         if (searchInput != null) {
+            // Отключаем фокус, чтобы клавиатура не вылетала на главном экране
             searchInput.setFocusable(false);
             searchInput.setClickable(true);
         }
 
+        // Слушатель для перехода на экран поиска
         View.OnClickListener openSearchListener = v -> {
             Intent intent = new Intent(getActivity(), SearchActivity.class);
             startActivity(intent);
+            // Плавный переход
             if (getActivity() != null) {
                 getActivity().overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
             }
@@ -68,6 +71,7 @@ public class HomeFragment extends Fragment {
         if (searchInput != null) searchInput.setOnClickListener(openSearchListener);
 
 
+        // --- Инициализация RecyclerView ---
         recyclerView = view.findViewById(R.id.products_recycler);
         if (recyclerView != null) {
             recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
@@ -78,9 +82,10 @@ public class HomeFragment extends Fragment {
     }
 
     private void loadProductsFromServer() {
+        // Получаем API через твой NetworkService
         NetworkService.getInstance(requireContext())
                 .getJSONApi()
-                .getProducts(0, 20)
+                .getProducts(0, 20) // Загружаем первую страницу, 20 товаров
                 .enqueue(new Callback<PageResponse<ProductDTO>>() {
                     @Override
                     public void onResponse(@NonNull Call<PageResponse<ProductDTO>> call, @NonNull Response<PageResponse<ProductDTO>> response) {

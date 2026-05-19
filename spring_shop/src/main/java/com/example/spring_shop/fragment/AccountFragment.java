@@ -1,6 +1,5 @@
 package com.example.spring_shop.fragment;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -39,11 +38,11 @@ public class AccountFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_account, container, false);
     }
 
-    @SuppressLint("WrongViewCast")
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        // Инициализация UI
         profileLayout = view.findViewById(R.id.profile_layout);
         authLayout = view.findViewById(R.id.auth_layout);
         unverifiedLayout = view.findViewById(R.id.unverified_layout);
@@ -57,8 +56,10 @@ public class AccountFragment extends Fragment {
         btnActionCart = view.findViewById(R.id.btn_action_cart);
         btnActionOrders = view.findViewById(R.id.btn_action_orders);
 
+        // Проверка авторизации при создании экрана
         checkAuthStatus();
 
+        // Слушатели кнопок
         setupClickListeners();
     }
 
@@ -69,10 +70,12 @@ public class AccountFragment extends Fragment {
     }
 
     private void checkAuthStatus() {
+        // Извлекаем JWT токен из SharedPreferences
         SharedPreferences prefs = requireContext().getSharedPreferences("AUTH_PREFS", Context.MODE_PRIVATE);
         String token = prefs.getString("JWT_TOKEN", null);
 
         if (token != null && !token.isEmpty()) {
+            // Если токен есть, пока не показываем гостевой экран, ждем загрузки
             loadUserProfile(token);
         } else {
             showGuestState();
@@ -80,6 +83,8 @@ public class AccountFragment extends Fragment {
     }
 
     private void loadUserProfile(String token) {
+        // Вызов твоего Spring Boot бэкенда для получения данных "О себе"
+        // Заголовок должен быть: "Authorization: Bearer " + token
         NetworkService.getInstance(requireContext())
                 .getJSONApi()
                 .getCurrentUser("Bearer " + token)
@@ -90,6 +95,7 @@ public class AccountFragment extends Fragment {
                         if (response.isSuccessful() && response.body() != null) {
                             displayUserData(response.body());
                         } else {
+                            // Если токен протух или ошибка — переходим в режим гостя
                             showGuestState();
                         }
                     }
@@ -103,6 +109,7 @@ public class AccountFragment extends Fragment {
     }
 
     private void displayUserData(UserDTO user) {
+        // Сохраняем статус подтверждения почты
         SharedPreferences prefs = requireContext().getSharedPreferences("AUTH_PREFS", Context.MODE_PRIVATE);
         prefs.edit().putBoolean("USER_ENABLED", user.isEnabled()).apply();
 
