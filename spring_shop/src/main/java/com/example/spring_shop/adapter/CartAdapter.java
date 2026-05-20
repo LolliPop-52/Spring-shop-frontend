@@ -170,7 +170,18 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
         });
 
         holder.btnDecrease.setOnClickListener(v -> {
-            deleteCartItem(product.getId(), new BigDecimal("1"));
+            if (item.getAmount().intValue() <= 1) {
+                new androidx.appcompat.app.AlertDialog.Builder(context)
+                        .setTitle("Удаление товара")
+                        .setMessage("Вы уверены, что хотите удалить товар из корзины?")
+                        .setPositiveButton("Удалить", (dialog, which) -> {
+                            deleteCartItem(product.getId(), new BigDecimal("1"));
+                        })
+                        .setNegativeButton("Отмена", null)
+                        .show();
+            } else {
+                deleteCartItem(product.getId(), new BigDecimal("1"));
+            }
         });
 
         holder.btnIncrease.setOnClickListener(v -> {
@@ -178,7 +189,14 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
         });
 
         holder.btnRemove.setOnClickListener(v -> {
-            deleteCartItem(product.getId(), item.getAmount());
+            new androidx.appcompat.app.AlertDialog.Builder(context)
+                    .setTitle("Удаление товара")
+                    .setMessage("Вы уверены, что хотите удалить товар из корзины?")
+                    .setPositiveButton("Удалить", (dialog, which) -> {
+                        deleteCartItem(product.getId(), item.getAmount());
+                    })
+                    .setNegativeButton("Отмена", null)
+                    .show();
         });
     }
 

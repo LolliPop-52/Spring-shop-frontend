@@ -226,6 +226,9 @@ public class CartFragment extends Fragment {
     }
     
     private void updateCartUI(BucketDTO bucket) {
+        if (getActivity() instanceof com.example.spring_shop.MainActivity) {
+            ((com.example.spring_shop.MainActivity) getActivity()).updateCartBadge();
+        }
         if (bucket.getItems() == null || bucket.getItems().isEmpty()) {
             // Cart is empty
             orderButton.setText("Корзина пуста");

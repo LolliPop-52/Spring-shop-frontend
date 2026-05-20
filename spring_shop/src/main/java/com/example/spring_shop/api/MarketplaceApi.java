@@ -58,6 +58,9 @@ public interface MarketplaceApi {
     @GET("/api/v1/bucket")
     Call<com.example.spring_shop.model.BucketDTO> getBucket(@Header("Authorization") String token);
 
+    @GET("/api/v1/bucket/amount")
+    Call<java.math.BigDecimal> getBucketAmount(@Header("Authorization") String token);
+
     @POST("/api/v1/bucket")
     Call<com.example.spring_shop.model.BucketDTO> addBucketItem(@Header("Authorization") String token, @Body com.example.spring_shop.model.ModifyBucketItemDTO modifyBucketItemDTO);
 

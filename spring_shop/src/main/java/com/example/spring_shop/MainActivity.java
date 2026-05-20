@@ -58,6 +58,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        updateCartBadge();
+    }
+
+    @Override
     protected void onNewIntent(android.content.Intent intent) {
         super.onNewIntent(intent);
         setIntent(intent);
@@ -85,6 +91,46 @@ public class MainActivity extends AppCompatActivity {
                         public void onFailure(Call<UserDTO> call, Throwable t) {}
                     });
         }
+    }
+
+    public void updateCartBadge() {
+        SharedPreferences prefs = getSharedPreferences("AUTH_PREFS", Context.MODE_PRIVATE);
+        String token = prefs.getString("JWT_TOKEN", null);
+        BottomNavigationView bottomNav = findViewById(R.id.bottom_navigation);
+
+        if (token == null || token.isEmpty()) {
+            bottomNav.removeBadge(R.id.nav_cart);
+            return;
+        }
+
+        NetworkService.getInstance(this).getJSONApi()
+                .getBucketAmount("Bearer " + token)
+                .enqueue(new Callback<java.math.BigDecimal>() {
+                    @Override
+                    public void onResponse(Call<java.math.BigDecimal> call, Response<java.math.BigDecimal> response) {
+                        if (response.isSuccessful() && response.body() != null) {
+                            int count = response.body().intValue();
+                            
+                            if (count > 0) {
+                                com.google.android.material.badge.BadgeDrawable badge = bottomNav.getOrCreateBadge(R.id.nav_cart);
+                                badge.setBackgroundColor(getResources().getColor(R.color.accent_green));
+                                badge.setBadgeTextColor(getResources().getColor(R.color.black));
+                                badge.setMaxCharacterCount(3);
+                                badge.setNumber(count);
+                                badge.setVisible(true);
+                            } else {
+                                bottomNav.removeBadge(R.id.nav_cart);
+                            }
+                        } else {
+                            bottomNav.removeBadge(R.id.nav_cart);
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<java.math.BigDecimal> call, Throwable t) {
+                        bottomNav.removeBadge(R.id.nav_cart);
+                    }
+                });
     }
 
     private void handleIntent(android.content.Intent intent, BottomNavigationView bottomNav) {

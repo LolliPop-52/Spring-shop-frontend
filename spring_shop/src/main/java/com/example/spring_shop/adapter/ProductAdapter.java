@@ -138,6 +138,9 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
                     cartProductIds.add(productId);
                     notifyItemChanged(position);
                     Toast.makeText(context, "Добавлено в корзину", Toast.LENGTH_SHORT).show();
+                    if (context instanceof com.example.spring_shop.MainActivity) {
+                        ((com.example.spring_shop.MainActivity) context).updateCartBadge();
+                    }
                 } else {
                     Toast.makeText(context, "Ошибка добавления", Toast.LENGTH_SHORT).show();
                 }
@@ -150,37 +153,47 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
     }
 
     private void removeFromCart(String token, Long productId, int position, ProductViewHolder holder) {
-        // Find existing amount to remove all
-        api.getBucket("Bearer " + token).enqueue(new Callback<BucketDTO>() {
-            @Override
-            public void onResponse(Call<BucketDTO> call, Response<BucketDTO> response) {
-                if (response.isSuccessful() && response.body() != null) {
-                    BigDecimal amount = BigDecimal.ZERO;
-                    for (com.example.spring_shop.model.BucketItemDTO item : response.body().getItems()) {
-                        if (item.getSmallProductDTO().getId().equals(productId)) {
-                            amount = item.getAmount();
-                            break;
-                        }
-                    }
-                    if (amount.compareTo(BigDecimal.ZERO) > 0) {
-                        api.deleteBucketItem("Bearer " + token, new ModifyBucketItemDTO(productId, amount)).enqueue(new Callback<BucketDTO>() {
-                            @Override
-                            public void onResponse(Call<BucketDTO> call, Response<BucketDTO> response) {
-                                if (response.isSuccessful()) {
-                                    cartProductIds.remove(productId);
-                                    notifyItemChanged(position);
-                                    Toast.makeText(context, "Удалено из корзины", Toast.LENGTH_SHORT).show();
+        new androidx.appcompat.app.AlertDialog.Builder(context)
+                .setTitle("Удаление товара")
+                .setMessage("Вы уверены, что хотите удалить товар из корзины?")
+                .setPositiveButton("Удалить", (dialog, which) -> {
+                    // Find existing amount to remove all
+                    api.getBucket("Bearer " + token).enqueue(new Callback<BucketDTO>() {
+                        @Override
+                        public void onResponse(Call<BucketDTO> call, Response<BucketDTO> response) {
+                            if (response.isSuccessful() && response.body() != null) {
+                                BigDecimal amount = BigDecimal.ZERO;
+                                for (com.example.spring_shop.model.BucketItemDTO item : response.body().getItems()) {
+                                    if (item.getSmallProductDTO().getId().equals(productId)) {
+                                        amount = item.getAmount();
+                                        break;
+                                    }
+                                }
+                                if (amount.compareTo(BigDecimal.ZERO) > 0) {
+                                    api.deleteBucketItem("Bearer " + token, new ModifyBucketItemDTO(productId, amount)).enqueue(new Callback<BucketDTO>() {
+                                        @Override
+                                        public void onResponse(Call<BucketDTO> call, Response<BucketDTO> response) {
+                                            if (response.isSuccessful()) {
+                                                cartProductIds.remove(productId);
+                                                notifyItemChanged(position);
+                                                Toast.makeText(context, "Удалено из корзины", Toast.LENGTH_SHORT).show();
+                                                if (context instanceof com.example.spring_shop.MainActivity) {
+                                                    ((com.example.spring_shop.MainActivity) context).updateCartBadge();
+                                                }
+                                            }
+                                        }
+                                        @Override
+                                        public void onFailure(Call<BucketDTO> call, Throwable t) {}
+                                    });
                                 }
                             }
-                            @Override
-                            public void onFailure(Call<BucketDTO> call, Throwable t) {}
-                        });
-                    }
-                }
-            }
-            @Override
-            public void onFailure(Call<BucketDTO> call, Throwable t) {}
-        });
+                        }
+                        @Override
+                        public void onFailure(Call<BucketDTO> call, Throwable t) {}
+                    });
+                })
+                .setNegativeButton("Отмена", null)
+                .show();
     }
 
 

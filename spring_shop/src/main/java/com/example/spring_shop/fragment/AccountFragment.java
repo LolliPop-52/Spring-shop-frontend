@@ -167,6 +167,9 @@ public class AccountFragment extends Fragment {
             SharedPreferences prefs = requireContext().getSharedPreferences("AUTH_PREFS", Context.MODE_PRIVATE);
             prefs.edit().remove("JWT_TOKEN").remove("USER_ENABLED").apply();
             showGuestState();
+            if (getActivity() instanceof com.example.spring_shop.MainActivity) {
+                ((com.example.spring_shop.MainActivity) getActivity()).updateCartBadge();
+            }
         };
 
         btnLogout.setOnClickListener(logoutListener);
